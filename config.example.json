@@ -1,0 +1,24 @@
+{
+  "language": "en",
+  "panelTitle": "Live Queue",
+  "overlayTitle": "Up next",
+  "twitchChannel": "",
+  "keyword": "!queue",
+  "queueLimit": 300,
+  "overlayRows": 10,
+  "sources": "both",
+  "blockDuplicates": true,
+  "tikfinity": "ws://127.0.0.1:21213/",
+  "port": 8420,
+  "theme": {
+    "accent": "#2f80ed",
+    "bg": "#0e1117",
+    "surface": "#171b22",
+    "border": "#272d38",
+    "text": "#e6eaf1",
+    "twitch": "#9146ff",
+    "tiktok": "#25f4ee"
+  },
+  "logoFile": null,
+  "logoVersion": 0
+}
