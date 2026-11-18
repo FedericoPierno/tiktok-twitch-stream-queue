@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<!--
+  Live Queue
+  Copyright (c) 2026 Federico Pierno
+  MIT License with the Commons Clause. See LICENSE.
+-->
+
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Live Queue</title>
+<link rel="icon" href="favicon.svg">
+<link rel="apple-touch-icon" href="favicon.svg">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<div class="wrap">
+
+  <header class="topbar">
+    <div class="brand">
+      <div class="mark" id="brand-mark"></div>
+      <div>
+        <h1 id="panel-title">Live Queue</h1>
+        <p class="keyword-line"><span data-t="keywordLabel">Keyword</span> <b id="keyword-echo">!queue</b></p>
+      </div>
+    </div>
+
+    <div class="tools">
+      <div class="status">
+        <div class="status-row"><span class="dot" id="dot-twitch"></span><span id="label-twitch">Twitch</span></div>
+        <div class="status-row"><span class="dot" id="dot-tiktok"></span><span id="label-tiktok">TikTok</span></div>
+      </div>
+      <button class="menu-toggle" id="open-menu" aria-expanded="false" aria-controls="sidebar" aria-label="Settings">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+      </button>
+    </div>
+  </header>
+
+  <div class="toolbar">
+    <button class="btn-primary" id="call-next" data-t="callNext">Call next</button>
+    <button class="btn" id="clear-queue" data-t="clear">Clear</button>
+    <div class="counters">
+      <div><span data-t="waiting">In queue</span><b id="count-waiting">0</b></div>
+      <div><span data-t="called">Called</span><b id="count-called">0</b></div>
+    </div>
+  </div>
+
+  <div class="overlay-head">
+    <div class="mark" id="overlay-mark"></div>
+    <h2 id="overlay-title">Up next</h2>
+    <span id="overlay-count"></span>
+  </div>
+
+  <div class="queue" id="queue"></div>
+
+  <p class="hint" id="hint"></p>
+
+</div>
+
+<div class="scrim" id="scrim"></div>
+
+<aside class="sidebar" id="sidebar" aria-hidden="true">
+  <header>
+    <h2 data-t="settings">Settings</h2>
+    <button class="close" id="close-menu" aria-label="Close">&times;</button>
+  </header>
+
+  <div class="body">
+
+    <section class="group">
+      <h3 data-t="logo">Logo</h3>
+      <div class="dropzone" id="dropzone">
+        <div class="preview" id="logo-preview"></div>
+        <div>
+          <b data-t="dropHere">Drop your logo here</b>
+          <p data-t="logoHelp"></p>
+        </div>
+      </div>
+      <div class="row">
+        <button class="btn-small" id="pick-logo" data-t="chooseFile">Choose file</button>
+        <button class="btn" id="drop-logo" data-t="removeLogo">Remove logo</button>
+      </div>
+      <input type="file" id="logo-input" accept="image/png,image/jpeg,image/gif,image/webp" hidden>
+      <span class="toast" id="toast-logo"></span>
+    </section>
+
+    <section class="group">
+      <h3 data-t="colours">Colours</h3>
+      <div class="swatches" id="swatches"></div>
+      <div class="row">
+        <button class="btn" id="reset-colours" data-t="resetColours">Reset colours</button>
+      </div>
+      <span class="toast" id="toast-colours"></span>
+    </section>
+
+    <section class="group">
+      <h3 data-t="language">Language</h3>
+      <div class="field">
+        <label for="f-language" data-t="interfaceLanguage">Interface language</label>
+        <select id="f-language">
+          <option value="en">English</option>
+          <option value="it">Italiano</option>
+        </select>
+      </div>
+    </section>
+
+    <section class="group">
+      <h3 data-t="behaviour">Behaviour</h3>
+
+      <div class="field">
+        <label for="f-keyword" data-t="keywordLabel">Keyword</label>
+        <input type="text" id="f-keyword" autocomplete="off" spellcheck="false">
+      </div>
+
+      <div class="field">
+        <label for="f-channel" data-t="twitchChannel">Twitch channel</label>
+        <input type="text" id="f-channel" autocomplete="off" spellcheck="false" placeholder="channelname">
+        <p class="note" data-t="channelHelp"></p>
+      </div>
+
+      <div class="field">
+        <label for="f-sources" data-t="chatSources">Chat sources</label>
+        <select id="f-sources">
+          <option value="both">Twitch + TikTok</option>
+          <option value="twitch" data-t="twitchOnly">Twitch only</option>
+          <option value="tiktok" data-t="tiktokOnly">TikTok only</option>
+        </select>
+      </div>
+
+      <div class="pair">
+        <div class="field">
+          <label for="f-limit" data-t="queueLimit">Queue limit</label>
+          <input type="number" id="f-limit" min="1" max="999">
+        </div>
+        <div class="field">
+          <label for="f-rows" data-t="overlayRows">Rows in overlay</label>
+          <input type="number" id="f-rows" min="1" max="30">
+        </div>
+      </div>
+
+      <div class="check">
+        <input type="checkbox" id="f-duplicates">
+        <label for="f-duplicates" data-t="blockDuplicates">Ignore people already in the queue</label>
+      </div>
+
+      <div class="field">
+        <label for="f-tikfinity" data-t="tikfinityAddress">TikFinity address</label>
+        <input type="text" id="f-tikfinity" autocomplete="off" spellcheck="false">
+        <p class="note" data-t="tikfinityHelp"></p>
+      </div>
+    </section>
+
+    <section class="group">
+      <h3 data-t="labels">Labels</h3>
+      <div class="field">
+        <label for="f-title" data-t="panelTitle">Panel title</label>
+        <input type="text" id="f-title" autocomplete="off">
+      </div>
+      <div class="field">
+        <label for="f-overlay-title" data-t="overlayTitle">Overlay title</label>
+        <input type="text" id="f-overlay-title" autocomplete="off">
+      </div>
+    </section>
+
+    <div class="row" style="padding: 18px 0 4px">
+      <button class="btn-small" id="save-settings" data-t="saveSettings">Save settings</button>
+    </div>
+    <span class="toast" id="toast-settings"></span>
+
+    <section class="group">
+      <h3 data-t="addresses">Addresses</h3>
+      <div class="address"><span data-t="panel">Panel</span><b id="addr-panel"></b></div>
+      <div class="address"><span data-t="overlaySource">Overlay for OBS (Browser source)</span><b id="addr-overlay"></b></div>
+      <p class="note" data-t="obsHelp"></p>
+    </section>
+
+  </div>
+</aside>
+
+<script src="i18n.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
