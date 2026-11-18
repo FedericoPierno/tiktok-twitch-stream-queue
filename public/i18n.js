@@ -1,0 +1,143 @@
+/*
+ * Live Queue
+ * Copyright (c) 2026 Federico Pierno
+ * MIT License with the Commons Clause. See LICENSE.
+ */
+
+// Interface strings. Add a language by copying the "en" block and translating
+// the values; the key list is what app.js looks up.
+window.STRINGS = {
+  en: {
+    settings: 'Settings',
+    logo: 'Logo',
+    dropHere: 'Drop your logo here',
+    logoHelp: 'or use the button below. 256 × 256 px works best: a square PNG with a transparent background. Up to 2 MB, PNG / JPG / GIF / WebP.',
+    chooseFile: 'Choose file',
+    removeLogo: 'Remove logo',
+    colours: 'Colours',
+    resetColours: 'Reset colours',
+    language: 'Language',
+    interfaceLanguage: 'Interface language',
+    behaviour: 'Behaviour',
+    keywordLabel: 'Keyword',
+    twitchChannel: 'Twitch channel',
+    channelHelp: 'Just the name, as it appears in the channel URL. Pasting the full link works too.',
+    chatSources: 'Chat sources',
+    twitchOnly: 'Twitch only',
+    tiktokOnly: 'TikTok only',
+    queueLimit: 'Queue limit',
+    overlayRows: 'Rows in overlay',
+    blockDuplicates: 'Ignore people already in the queue',
+    tikfinityAddress: 'TikFinity address',
+    tikfinityHelp: 'Only change this if you moved the port of the TikFinity Event API.',
+    labels: 'Labels',
+    panelTitle: 'Panel title',
+    overlayTitle: 'Overlay title',
+    saveSettings: 'Save settings',
+    addresses: 'Addresses',
+    panel: 'Panel',
+    overlaySource: 'Overlay for OBS (Browser source)',
+    obsHelp: 'In OBS: Sources → + → Browser, paste the overlay address, width 420 and height 600.',
+
+    callNext: 'Call next',
+    clear: 'Clear',
+    waiting: 'In queue',
+    called: 'Called',
+    emptyTitle: 'Nobody in the queue',
+    emptyBody: 'Anyone who types {keyword} in chat shows up here.',
+    hint: 'Press {key} to call the next person · {x} drops whoever does not answer',
+    overlayWaiting: '{count} waiting',
+    removeFrom: 'Remove {name}',
+
+    savedSettings: 'Settings saved',
+    savedColours: 'Colours saved',
+    coloursReset: 'Colours reset',
+    logoUploaded: 'Logo uploaded',
+    logoRemoved: 'Logo removed',
+    tooLarge: 'That file is over 2 MB',
+    badFormat: 'Use a PNG, JPG, GIF or WebP file',
+    failed: 'Something went wrong',
+
+    stateOff: 'off',
+    stateConnecting: 'connecting',
+    stateConnected: 'connected',
+    stateRetrying: 'retrying',
+    stateNoChannel: 'no channel set',
+    stateNoTikfinity: 'TikFinity not reachable',
+    stateLooking: 'looking for TikFinity',
+    stateDemo: 'demo'
+  },
+
+  it: {
+    settings: 'Impostazioni',
+    logo: 'Logo',
+    dropHere: 'Trascina qui il tuo logo',
+    logoHelp: 'oppure usa il pulsante qui sotto. La misura ideale è 256 × 256 px: un PNG quadrato con sfondo trasparente. Fino a 2 MB, PNG / JPG / GIF / WebP.',
+    chooseFile: 'Scegli file',
+    removeLogo: 'Togli logo',
+    colours: 'Colori',
+    resetColours: 'Ripristina colori',
+    language: 'Lingua',
+    interfaceLanguage: 'Lingua dell’interfaccia',
+    behaviour: 'Funzionamento',
+    keywordLabel: 'Parola chiave',
+    twitchChannel: 'Canale Twitch',
+    channelHelp: 'Solo il nome, come compare nell’indirizzo del canale. Puoi anche incollare il link intero.',
+    chatSources: 'Chat da ascoltare',
+    twitchOnly: 'Solo Twitch',
+    tiktokOnly: 'Solo TikTok',
+    queueLimit: 'Massimo in lista',
+    overlayRows: 'Righe nell’overlay',
+    blockDuplicates: 'Ignora chi è già in lista',
+    tikfinityAddress: 'Indirizzo TikFinity',
+    tikfinityHelp: 'Cambialo solo se hai spostato la porta dell’Event API di TikFinity.',
+    labels: 'Testi',
+    panelTitle: 'Titolo del pannello',
+    overlayTitle: 'Titolo dell’overlay',
+    saveSettings: 'Salva impostazioni',
+    addresses: 'Indirizzi',
+    panel: 'Pannello',
+    overlaySource: 'Overlay per OBS (sorgente Browser)',
+    obsHelp: 'In OBS: Fonti → + → Browser, incolla l’indirizzo dell’overlay, larghezza 420 e altezza 600.',
+
+    callNext: 'Chiama il prossimo',
+    clear: 'Svuota',
+    waiting: 'In lista',
+    called: 'Chiamati',
+    emptyTitle: 'Nessuno in lista',
+    emptyBody: 'Chi scrive {keyword} in chat compare qui.',
+    hint: 'Premi {key} per chiamare il prossimo · {x} toglie chi non risponde',
+    overlayWaiting: '{count} in attesa',
+    removeFrom: 'Togli {name}',
+
+    savedSettings: 'Impostazioni salvate',
+    savedColours: 'Colori salvati',
+    coloursReset: 'Colori ripristinati',
+    logoUploaded: 'Logo caricato',
+    logoRemoved: 'Logo rimosso',
+    tooLarge: 'Il file supera i 2 MB',
+    badFormat: 'Usa un file PNG, JPG, GIF o WebP',
+    failed: 'Qualcosa non ha funzionato',
+
+    stateOff: 'spento',
+    stateConnecting: 'connessione',
+    stateConnected: 'collegato',
+    stateRetrying: 'riprovo',
+    stateNoChannel: 'canale non impostato',
+    stateNoTikfinity: 'TikFinity non raggiungibile',
+    stateLooking: 'cerco TikFinity',
+    stateDemo: 'demo'
+  }
+};
+
+// state key -> string key, plus how the status dot should look
+window.STATE_MAP = {
+  off:         { key: 'stateOff',         dot: '' },
+  connecting:  { key: 'stateConnecting',  dot: '' },
+  connected:   { key: 'stateConnected',   dot: 'up' },
+  retrying:    { key: 'stateRetrying',    dot: 'down' },
+  no_channel:  { key: 'stateNoChannel',   dot: 'down' },
+  looking:     { key: 'stateLooking',     dot: '' },
+  unreachable: { key: 'stateNoTikfinity', dot: 'down' },
+  demo:        { key: 'stateDemo',        dot: 'up' }
+};
